@@ -1,7 +1,7 @@
 library(Tplyr)
 
 ## Read in the Data ----
-adsl <- readRDS(file.path('data', 'adsl.rds'))
+adsl <- readRDS(here::here('data', 'adsl.rds'))
 
 ## If you need help, you can follow the Get Started vignette right here: 
 ## https://atorus-research.github.io/Tplyr/articles/Tplyr.html

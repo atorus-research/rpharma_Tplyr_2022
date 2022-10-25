@@ -3,7 +3,7 @@ library(dplyr)
 library(tidyr)
 
 ## Read in the Data ----
-adsl <- readRDS(file.path('data', 'adsl.rds'))
+adsl <- readRDS(here::here('data', 'adsl.rds'))
 
 ## If you need help, you can follow these two vignettes: 
 ## https://atorus-research.github.io/Tplyr/articles/metadata.html
@@ -72,8 +72,8 @@ get_meta_subset(t, "c2_3", "var1_Placebo")
 
 
 ######## Problem 5 continues down below - this is some pre-work necessary for remaining questions ----
-adsl <- readRDS(file.path('data', 'adsl.rds'))
-adas <- readRDS(file.path('data', 'adas.rds'))
+adsl <- readRDS(here::here('data', 'adsl.rds'))
+adas <- readRDS(here::here('data', 'adas.rds'))
 
 # This table code is to support the primary efficacy table for CDISC Pilot table 14-3.01
 t <- tplyr_table(adas, TRTP, where=EFFFL == "Y" & ITTFL == "Y" & PARAMCD == "ACTOT" & ANL01FL == "Y") %>%
