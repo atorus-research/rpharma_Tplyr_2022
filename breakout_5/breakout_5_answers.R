@@ -7,10 +7,11 @@ library(tidyr)
 library(purrr)
 library(rlang)
 
-load("./data/adsl.Rdata")
-load("./data/adas.Rdata")
+adsl <- readRDS(here::here('data', 'adsl.rds'))
+adas <- readRDS(here::here('data', 'adas.rds'))
 
-tab <- tplyr_table(adas, TRTP, where=EFFFL == "Y" & ITTFL == "Y" & PARAMCD == "ACTOT" & ANL01FL == "Y") %>%
+# Pull your work from Breakout 3: Problem 5 to complete the application ----
+t <- tplyr_table(adas, TRTP, where=EFFFL == "Y" & ITTFL == "Y" & PARAMCD == "ACTOT" & ANL01FL == "Y") %>%
   set_pop_data(adsl) %>%
   set_pop_treat_var(TRT01P) %>%
   set_pop_where(EFFFL == "Y" & ITTFL == "Y") %>%
@@ -30,7 +31,7 @@ tab <- tplyr_table(adas, TRTP, where=EFFFL == "Y" & ITTFL == "Y" & PARAMCD == "A
     group_desc(CHG,  where= AVISITN == 24, by = "Change from Baseline")
   )
 
-sum_data <- tab %>%
+sum_data <- t %>%
   build(metadata=TRUE) %>%
   apply_row_masks() %>%
   select(row_id, starts_with('row_label'),
@@ -50,7 +51,7 @@ model_portion <- tibble::tribble(
   "x4_9",    "   95% CI",                          "",                          "(-2.2;1.1)"
 )
 
-b_tab <- bind_rows(sum_data, model_portion) %>%
+results <- bind_rows(sum_data, model_portion) %>%
   mutate(
     across(where(is.character), ~ replace_na(., ""))
   )
@@ -84,7 +85,7 @@ eff_meta <- tibble::tribble(
   "x4_9",    "   95% CI",                          NULL,                        meta_xlh
 )
 
-tab <- append_metadata(tab, eff_meta)
+t <- append_metadata(t, eff_meta)
 
 
 ui <- fillPage(
@@ -94,12 +95,12 @@ ui <- fillPage(
 
 server <- function(input, output) {
   
-  row <- reactive(b_tab[input$row$index,1]$row_id)
+  row <- reactive(results[input$row$index,1]$row_id)
   col <- reactive(input$col$column)
   
   output$demoTab <- renderReactable(
     reactable(
-      select(b_tab, -row_id, -starts_with("ord")),
+      select(results, -row_id, -starts_with("ord")),
       sortable = FALSE,
       onClick = JS("function(rowInfo, colInfo) {
                       if (window.Shiny) {
@@ -121,7 +122,7 @@ server <- function(input, output) {
   
   sub_data <- reactive({
     req(row(), col())
-    tmp <- get_meta_subset(tab, row(), col())
+    tmp <- get_meta_subset(t, row(), col())
     tmp
   })
   
