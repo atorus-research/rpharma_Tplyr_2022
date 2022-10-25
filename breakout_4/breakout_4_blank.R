@@ -16,24 +16,12 @@ adsl <- readRDS(here::here('data', 'adsl.rds')) %>%
   )
 
 # Summarize adsl, with the treatment variable TRT01A ----
-tab <- tplyr_table(adsl, TRT01A) %>%
-  # Add a layer for SEX with a row label of "Sex n (%)" ----
-  add_layer(
-    group_count(SEX, by = "Sex n (%)")
-  ) %>%
-  # Add a layer for AGE with a row label of "Age (years)" ----
-  add_layer(
-    group_desc(AGE, by = "Age (years)")
-  ) %>%
-  # Add a layer for RACE with a row label of "Race n (%)" ----
-  add_layer(
-    group_count(RACE, by = "Race n (%)")
-  )
+tab <- 
 # When you're done, if you have time, edit the table above and see what else you can make, 
 # and how the table is still interactive! 
 
 # Build the table with metadata ----
-results <- build(tab, metadata = TRUE) %>%
+results <- <build the table here> %>%
   # This is all post processing
   # See https://atorus-research.github.io/Tplyr/articles/styled-table.html
   apply_row_masks() %>%
@@ -51,8 +39,8 @@ server <- function(input, output) {
   # Set the reactives for row and column from the click event ----
   # For row, pull out the index element from the row element of the input
   # For col, pull out the column element from the col element of the input
-  row <- reactive(results[input$row$index,1]$row_id)
-  col <- reactive(input$col$column)
+  row <- 
+  col <- 
   
   output$demoTab <- renderReactable(
     reactable(
@@ -63,12 +51,7 @@ server <- function(input, output) {
       # Set the key for 'row' to index and 'col' to column for reference later
       # This small JS function talks with Shiny by letting us pass in a JavaScript function directly. 
       # Note that the data format here is built to work with reactable
-      onClick = JS("function(rowInfo, colInfo) {
-                      if (window.Shiny) {
-                        Shiny.setInputValue('row', { index: rowInfo.index + 1 })
-                        Shiny.setInputValue('col', { column: colInfo.id })
-                        }
-                    }"),
+      onClick = JS(<JS Code Here>),
       height = 450,
       defaultPageSize = 11,
       columns = list(
@@ -85,9 +68,7 @@ server <- function(input, output) {
   # Remember that the Tplyr table's object name is `tab`, and that reactives are callables! (i.e. need ())
   # row will be the row_id, and col will be the column. Use ?get_meta_subset() for help
   sub_data <- reactive({
-    req(row(), col())
-    tmp <- get_meta_subset(tab, row(), col())
-    tmp
+
   })
   
   # Now we'll render the subset datable as a reactable table using the sub_data() reactive we made above
