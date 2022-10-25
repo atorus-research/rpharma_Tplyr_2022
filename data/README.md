@@ -8,6 +8,8 @@ The data from this workshop has been sourced from the PHUSE Test Data Factor pro
   - https://github.com/phuse-org/TestDataFactory/raw/main/Updated/TDF_ADaM/adae.xpt
 - adas file source
   - https://github.com/phuse-org/TestDataFactory/raw/main/Updated/TDF_ADaM/adadas.xpt
+- adlb file source
+  - https://github.com/phuse-org/TestDataFactory/raw/main/Updated/TDF_ADaM/adlbc.xpt
 
 Files were saved as .rds files for ease of use. Please see [get_data.R](./get_data.R) for how to recreate these datasets yourself.
 
